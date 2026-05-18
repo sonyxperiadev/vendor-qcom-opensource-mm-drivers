@@ -19,5 +19,14 @@ msm_hw_fence-y := src/msm_hw_fence.o \
 
 msm_hw_fence-$(CONFIG_DEBUG_FS) += src/hw_fence_ioctl.o
 
+ifeq ($(CONFIG_QTI_HW_FENCE_USE_SYNX), y)
+LINUXINCLUDE += -I$(MSM_HW_FENCE_ROOT)/../synx/msm/synx \
+		-I$(MSM_HW_FENCE_ROOT)/../synx/include/uapi/synx/media
+
+msm_hw_fence-y += \
+		src/msm_hw_fence_synx_translation.o \
+		src/hw_fence_drv_interop.o
+endif
+
 EXTRA_CFLAGS += -Wformat-extra-args -Wstrict-prototypes -Wformat-insufficient-args \
 		-Wformat-invalid-specifier -Wformat-zero-length -Wnonnull
